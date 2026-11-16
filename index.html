@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="온라인 판매자를 위한 무료 판매 마진, 목표 판매가, ROAS, 배송비 계산 도구">
+<title>셀러마진랩 | 온라인 판매 수익 계산기</title>
+<style>
+:root{--green:#16834a;--green2:#eaf6ef;--ink:#17231c;--muted:#647168;--line:#e4ebe6;--bg:#f6f9f7;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;line-height:1.55}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.wrap{max-width:1080px;margin:auto;padding:0 22px}.top{height:72px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:850;font-size:21px;letter-spacing:-.7px}.brand span{color:var(--green)}nav{display:flex;gap:20px;font-size:14px}nav a{color:var(--muted);text-decoration:none}
+.hero{padding:58px 0 35px;background:linear-gradient(130deg,#eff9f2,#fff 65%)}.eyebrow{color:var(--green);font-weight:750;font-size:13px}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.18;letter-spacing:-1.8px;margin:12px 0}
+.lead{color:var(--muted);max-width:650px;font-size:16px}.pill{display:inline-block;border:1px solid #cce7d5;background:#f7fcf8;color:var(--green);border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700}
+main{padding:30px 0 70px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 15px;font-weight:700;color:var(--muted);cursor:pointer}
+.tab.active{background:var(--green);border-color:var(--green);color:white}
+.panel{display:none;background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 8px 28px #153a2010}
+.panel.active{display:block}.panel h2{margin:0 0 6px;font-size:22px}.sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.field input{width:100%;padding:13px 12px;border:1px solid #dce5de;border-radius:10px;font:inherit;background:#fff}
+.field input:focus{outline:3px solid #d9f0e1;border-color:var(--green)}
+.result{margin-top:22px;background:var(--green2);border:1px solid #d4ebdc;border-radius:14px;padding:18px}
+.result small{color:#47735a;font-weight:700}.big{font-size:30px;font-weight:850;color:var(--green);letter-spacing:-.8px;margin:3px 0}
+.metrics{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px;color:#456451;font-size:14px}
+.note{font-size:12px;color:var(--muted);margin-top:12px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px}.card b{display:block;margin-bottom:5px}.card p{margin:0;color:var(--muted);font-size:13px}
+.guides{margin-top:42px}.guides h2{font-size:24px}.guidegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.guide{background:white;border:1px solid var(--line);border-radius:14px;padding:18px}.guide h3{font-size:16px;margin:0 0 7px}.guide p{font-size:13px;color:var(--muted);margin:0}
+footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:12px}
+button:focus-visible,a:focus-visible{outline:3px solid #8dcda5;outline-offset:2px}
+@media(max-width:650px){nav{gap:10px;font-size:12px}.top{height:62px}.hero{padding:42px 0 28px}.grid,.guidegrid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.panel{padding:18px}.tab{flex:1;padding:10px 8px;font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">셀러<span>마진랩</span></div><nav><a href="#tools">계산기</a><a href="#guides">셀러 가이드</a></nav></div></header>
+<section class="hero"><div class="wrap"><span class="pill">SELLER MARGIN LAB · 무료 도구</span><div class="eyebrow" style="margin-top:17px">온라인 판매자를 위한 실전 계산 도구</div><h1>내 상품, 얼마에 팔아야<br>이익이 남을까?</h1><p class="lead">판매가와 원가, 수수료, 배송비를 입력해 예상 수익을 확인하세요. 복잡한 계산 없이 가격 결정의 기준을 잡을 수 있습니다.</p></div></section>
+<main class="wrap" id="tools">
+<div class="tabs" role="tablist">
+<button class="tab active" data-tab="margin">판매 마진</button><button class="tab" data-tab="price">목표 판매가</button><button class="tab" data-tab="roas">손익분기 ROAS</button><button class="tab" data-tab="shipping">배송·포장비</button>
+</div>
+<section class="panel active" id="margin"><h2>판매 마진 계산기</h2><p class="sub">상품 1개를 판매했을 때 남는 예상 금액을 계산합니다.</p>
+<div class="grid">
+<div class="field"><label for="m-price">판매 가격 (원)</label><input id="m-price" type="number" min="0" value="30000"></div>
+<div class="field"><label for="m-cost">상품 원가 (원)</label><input id="m-cost" type="number" min="0" value="12000"></div>
+<div class="field"><label for="m-fee">판매 수수료 (%)</label><input id="m-fee" type="number" min="0" step=".1" value="6"></div>
+<div class="field"><label for="m-ship">배송비 부담액 (원)</label><input id="m-ship" type="number" min="0" value="3000"></div>
+<div class="field"><label for="m-ad">상품당 광고비 (원)</label><input id="m-ad" type="number" min="0" value="2000"></div>
+<div class="field"><label for="m-extra">기타 비용 (원)</label><input id="m-extra" type="number" min="0" value="0"></div>
+</div><div class="result"><small>상품 1개당 예상 이익</small><div class="big" id="m-profit">—</div><div class="metrics"><span>이익률 <b id="m-rate">—</b></span><span>수수료 <b id="m-feeout">—</b></span></div></div><p class="note">단순 추정치입니다. 부가세, 반품·교환, 할인, 결제 및 플랫폼별 세부 비용은 별도로 반영해야 합니다.</p></section>
+<section class="panel" id="price"><h2>목표 판매가 계산기</h2><p class="sub">원하는 이익률을 달성하기 위한 판매가를 역산합니다.</p>
+<div class="grid">
+<div class="field"><label for="p-cost">상품 원가 (원)</label><input id="p-cost" type="number" min="0" value="12000"></div>
+<div class="field"><label for="p-fee">판매 수수료 (%)</label><input id="p-fee" type="number" min="0" max="99" step=".1" value="6"></div>
+<div class="field"><label for="p-ship">배송·포장 등 비용 (원)</label><input id="p-ship" type="number" min="0" value="3000"></div>
+<div class="field"><label for="p-profit">목표 이익률 (%)</label><input id="p-profit" type="number" min="0" max="99" step=".1" value="25"></div>
+</div><div class="result"><small>목표 판매 가격</small><div class="big" id="p-result">—</div><div class="metrics"><span>예상 이익 <b id="p-earned">—</b></span></div></div><p class="note">수수료와 목표 이익률은 판매가 기준으로 단순 계산합니다.</p></section>
+<section class="panel" id="roas"><h2>손익분기 ROAS 계산기</h2><p class="sub">광고비를 쓰기 전, 손실이 발생하지 않는 광고 효율 기준을 확인합니다.</p>
+<div class="grid">
+<div class="field"><label for="r-price">판매 가격 (원)</label><input id="r-price" type="number" min="0" value="30000"></div>
+<div class="field"><label for="r-cost">상품 원가 (원)</label><input id="r-cost" type="number" min="0" value="12000"></div>
+<div class="field"><label for="r-fee">판매 수수료 (%)</label><input id="r-fee" type="number" min="0" step=".1" value="6"></div>
+<div class="field"><label for="r-other">배송·기타 변동비 (원)</label><input id="r-other" type="number" min="0" value="3000"></div>
+</div><div class="result"><small>손익분기 ROAS</small><div class="big" id="r-result">—</div><div class="metrics"><span>광고 전 남는 금액 <b id="r-margin">—</b></span></div></div><p class="note">광고 전 공헌이익이 0 이하이면 광고로 손익분기를 달성할 수 없습니다. 실제 ROAS 목표는 추가 고정비와 목표 이익을 고려해 더 높게 잡으세요.</p></section>
+<section class="panel" id="shipping"><h2>배송·포장비 계산기</h2><p class="sub">주문당 배송 및 포장에 들어가는 비용을 합산합니다.</p>
+<div class="grid">
+<div class="field"><label for="s-box">택배비 (원)</label><input id="s-box" type="number" min="0" value="3000"></div>
+<div class="field"><label for="s-pack">박스·봉투 비용 (원)</label><input id="s-pack" type="number" min="0" value="400"></div>
+<div class="field"><label for="s-fill">완충재·테이프 등 (원)</label><input id="s-fill" type="number" min="0" value="200"></div>
+<div class="field"><label for="s-count">한 번에 포장하는 주문 수</label><input id="s-count" type="number" min="1" value="1"></div>
+</div><div class="result"><small>주문 1건당 배송·포장 비용</small><div class="big" id="s-result">—</div><div class="metrics"><span>총 비용 <b id="s-total">—</b></span></div></div></section>
+<div class="cards"><div class="card"><b>정확한 원가부터</b><p>상품 매입가뿐 아니라 배송, 포장, 수수료도 함께 계산하세요.</p></div><div class="card"><b>가격은 데이터로</b><p>경쟁 상품과 고객 반응을 확인하며 가격을 조정하세요.</p></div><div class="card"><b>광고는 손익 기준으로</b><p>손익분기 ROAS를 계산한 뒤 광고 예산을 정하세요.</p></div></div>
+<section class="guides" id="guides"><h2>초보 셀러를 위한 기본 가이드</h2><div class="guidegrid">
+<article class="guide"><h3>1. 상품 원가에 무엇을 넣어야 할까?</h3><p>매입가 외에도 입고 배송비, 포장재, 보관료, 반품 예상 비용 등 판매와 함께 발생하는 비용을 확인하세요.</p></article>
+<article class="guide"><h3>2. 판매 수수료는 어디서 확인할까?</h3><p>이용하는 플랫폼의 공식 판매자 도움말에서 카테고리, 결제 방식, 서비스별 최신 수수료를 확인하세요.</p></article>
+<article class="guide"><h3>3. ROAS만 높으면 괜찮을까?</h3><p>아닙니다. 매출 대비 광고 효율뿐 아니라 상품 원가와 수수료를 뺀 실제 이익을 함께 봐야 합니다.</p></article>
+<article class="guide"><h3>4. 계산 결과를 어떻게 활용할까?</h3><p>실제 정산 내역과 계산 결과를 비교하고, 누락된 비용을 찾아 입력값을 주기적으로 업데이트하세요.</p></article>
+</div></section>
+</main>
+<footer><div class="wrap">© 셀러마진랩 · 본 사이트의 계산 결과는 참고용 추정치이며 세무·회계·투자 자문이 아닙니다.</div></footer>
+<script>
+const $=id=>document.getElementById(id), num=id=>Math.max(0,Number($(id).value)||0), won=n=>Math.round(n).toLocaleString('ko-KR')+'원';
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')}));
+function margin(){let p=num('m-price'),c=num('m-cost'),f=num('m-fee'),s=num('m-ship'),a=num('m-ad'),e=num('m-extra'),fee=p*f/100,profit=p-c-fee-s-a-e;$('m-profit').textContent=won(profit);$('m-profit').style.color=profit>=0?'var(--green)':'#c0392b';$('m-rate').textContent=(p?((profit/p)*100).toFixed(1):'0.0')+'%';$('m-feeout').textContent=won(fee)}
+function price(){let c=num('p-cost'),f=Math.min(99,num('p-fee')),s=num('p-ship'),r=Math.min(99,num('p-profit')),den=1-(f+r)/100;if(den<=0){$('p-result').textContent='입력값 확인';$('p-earned').textContent='수수료와 목표 이익률 합계가 100% 미만이어야 합니다.';return}let p=(c+s)/den;$('p-result').textContent=won(p);$('p-earned').textContent=won(p*(1-f/100)-c-s)}
+function roas(){let p=num('r-price'),c=num('r-cost'),f=num('r-fee'),o=num('r-other'),m=p-c-p*f/100-o;$('r-margin').textContent=won(m);$('r-result').textContent=m>0?(p/m*100).toFixed(0)+'%': '손익분기 불가';}
+function shipping(){let total=num('s-box')+num('s-pack')+num('s-fill'),count=Math.max(1,num('s-count'));$('s-total').textContent=won(total);$('s-result').textContent=won(total/count)}
+const ids=['m-price','m-cost','m-fee','m-ship','m-ad','m-extra','p-cost','p-fee','p-ship','p-profit','r-price','r-cost','r-fee','r-other','s-box','s-pack','s-fill','s-count'];
+ids.forEach(id=>$(id).addEventListener('input',()=>{margin();price();roas();shipping()}));margin();price();roas();shipping();
+</script>
+</body></html>
